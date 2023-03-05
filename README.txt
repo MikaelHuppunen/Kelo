@@ -1,1 +1,1 @@
-Elo rating system for the Secret CHess Club: Kelo(TM)
+Elo rating system for the Secret Chess Club: Kelo(TM)

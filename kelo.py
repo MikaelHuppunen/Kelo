@@ -4,7 +4,7 @@ import numpy as np
 
 save = True
 
-with open("elo.txt", 'r') as f:
+with open("kelo.txt", 'r') as f:
     data = json.loads(f.read())
 
 def sortusers():
@@ -16,8 +16,6 @@ def sortusers():
         max_index = elos.index(max(elos))
         data[i] = temp_data[max_index].tolist()
         elos[max_index] = "-10000"
-
-sortusers()
 
 def calculate_elo(black, white, winner):
     global data
@@ -120,5 +118,5 @@ for i in range(len(inputdata)):
         inputdata[i] = '"'
 
 if(save):
-    with open("elo.txt", 'w') as f:
+    with open("kelo.txt", 'w') as f:
         data = f.write("".join(inputdata))

@@ -1,0 +1,1 @@
+Elo rating system for the Secret CHess Club: Kelo(TM)

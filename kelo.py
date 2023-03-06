@@ -8,6 +8,9 @@ with open("kelo.txt", 'r') as f:
     data = json.loads(f.read())
 
 def sortusers():
+    '''
+    Sorts users by elo
+    '''
     global data
     #saves orignal data to numpy array
     temp_data = np.array(deepcopy(data))

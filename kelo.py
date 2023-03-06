@@ -4,33 +4,31 @@ import numpy as np
 
 save = True
 
-with open("elo.txt", 'r') as f:
+with open("kelo.txt", 'r') as f:
     data = json.loads(f.read())
 
 def sortusers():
     global data
+    #saves orignal data to numpy array
     temp_data = np.array(deepcopy(data))
-    elos = temp_data[:,1]
-    elos = elos.tolist()
+    elos = temp_data[:,1].tolist()
     for i in range(len(elos)):
         max_index = elos.index(max(elos))
         data[i] = temp_data[max_index].tolist()
         elos[max_index] = "-10000"
 
-sortusers()
-
 def calculate_elo(black, white, winner):
     global data
     data[black][1] = float(data[black][1])
     data[white][1] = float(data[white][1])
-    R1 = 10**(data[black][1]/400)
-    R2 = 10**(data[white][1]/400)
-    expectancy1 = R1/(R1+R2)
-    expectancy2 = R2/(R1+R2)
-    S1 = int(winner == "black")+0.5*int(winner == "draw")
-    S2 = int(winner == "white")+0.5*int(winner == "draw")
-    data[black][1] += 40*(S1-expectancy1)
-    data[white][1] += 40*(S2-expectancy2)
+    transformed_rating1 = 10**(data[black][1]/400)
+    transformed_rating2 = 10**(data[white][1]/400)
+    expectancy1 = transformed_rating1/(transformed_rating1+transformed_rating2)
+    expectancy2 = transformed_rating2/(transformed_rating1+transformed_rating2)
+    score1 = int(winner == "black")+0.5*int(winner == "draw")
+    score2 = int(winner == "white")+0.5*int(winner == "draw")
+    data[black][1] += 40*(score1-expectancy1)
+    data[white][1] += 40*(score2-expectancy2)
     print("{0:10}{1:10}".format(data[white][0], round(data[white][1],1)))
     print("{0:10}{1:10}".format(data[black][0], round(data[black][1],1)))
 
@@ -120,5 +118,5 @@ for i in range(len(inputdata)):
         inputdata[i] = '"'
 
 if(save):
-    with open("elo.txt", 'w') as f:
+    with open("kelo.txt", 'w') as f:
         data = f.write("".join(inputdata))

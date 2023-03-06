@@ -9,9 +9,9 @@ with open("kelo.txt", 'r') as f:
 
 def sortusers():
     global data
+    #saves orignal data to numpy array
     temp_data = np.array(deepcopy(data))
-    elos = temp_data[:,1]
-    elos = elos.tolist()
+    elos = temp_data[:,1].tolist()
     for i in range(len(elos)):
         max_index = elos.index(max(elos))
         data[i] = temp_data[max_index].tolist()

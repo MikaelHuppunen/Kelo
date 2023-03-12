@@ -4,6 +4,7 @@ import numpy as np
 import math
 
 save = True
+startingelo = 1284
 
 with open("kelo.txt", 'r') as f:
     data = json.loads(f.read())
@@ -66,17 +67,12 @@ def game():
             return
 
 def adduser():
-    global data
+    global data, startingelo
     name = str(input("Input name: "))
     for i in range(len(data)):
         if name == data[i][0]:
             print("player already exists")
             return
-    try:
-        startingelo = float(input("Input elo: "))
-    except ValueError:
-        print("not a valid elo")
-        return
     data += [[name,startingelo]]
     print("user added")
 

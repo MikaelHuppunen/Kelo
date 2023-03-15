@@ -18,7 +18,11 @@ for(let i = 0; i < data.length; i++){
   document.write('<div style="position: absolute; left: 38vw; top: '+ (i*5) + 'vh;">');
   document.write(i+1 + ".");
   document.write('<span style="position: absolute; left: 3vw; top: 0;">'  + data[i][0] + '</span>');
-  document.write('<span style="position: absolute; left: 15vw; top: 0;">' + Math.round(data[i][1]*10)/10 + '</span>');
+  document.write('<span style="position: absolute; left: 15vw; top: 0;">' + Math.round(data[i][1]*10)/10);
+  if(data[i][2] < 5){
+    document.write("?")
+  }
+  document.write('</span>')
   document.write('</div>');
 }
 document.write('</div>');

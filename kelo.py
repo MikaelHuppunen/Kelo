@@ -32,8 +32,12 @@ def calculate_elo(black, white, winner):
     expectancy2 = transformed_rating2/(transformed_rating1+transformed_rating2)
     score1 = int(winner == "black")+0.5*int(winner == "draw")
     score2 = int(winner == "white")+0.5*int(winner == "draw")
+    #calculate new elos
     data[black][1] += 40*(score1-expectancy1)
     data[white][1] += 40*(score2-expectancy2)
+    #add 1 to number of games
+    data[black][2] = int(data[black][2])+1
+    data[white][2] = int(data[white][2])+1
     print("{0:10}{1:10}".format(data[white][0], round(data[white][1],1)))
     print("{0:10}{1:10}".format(data[black][0], round(data[black][1],1)))
 
@@ -73,8 +77,21 @@ def adduser():
         if name == data[i][0]:
             print("player already exists")
             return
-    data += [[name,startingelo]]
+    data += [[name,startingelo,0]]
     print("user added")
+
+def edituser():
+    user = input("User name: ")
+    for i in range(len(data)):
+        if user == data[i][0]:
+            try:
+                elo = float(input(f"elo: "))
+                games = int(input("number of games: "))
+                data[i] = [data[i][0],elo,games]
+            except ValueError:
+                print("invalid")
+            return
+    print(f"no user {user} exists")
 
 while(True):
     command = input("Input command: ")
@@ -88,6 +105,7 @@ while(True):
                 print("user removed")
                 break
         else:
+            #if no break
             print(f"no user {user} exists")
     elif command == "game":
         game()
@@ -95,6 +113,8 @@ while(True):
         sortusers()
         for i in range(len(data)):
             print("{0:10}{1:10}".format(data[i][0],round(float(data[i][1]),1)))
+    elif command == "edituser":
+        edituser()
     elif command == "abort":
         save = False
         print("exiting without saving")
@@ -104,8 +124,9 @@ while(True):
     elif command == "help":
         print("{0:15}{1:15}".format("game", "input a chess game"))
         print("{0:15}{1:15}".format("adduser", "add a user"))
-        print("{0:15}{1:15}".format("remove", "remove a user"))
+        print("{0:15}{1:15}".format("removeuser", "remove a user"))
         print("{0:15}{1:15}".format("showusers", "show elos of all users"))
+        print("{0:15}{1:15}".format("editusers", "edit elo and number of games of a users"))
         print("{0:15}{1:15}".format("abort", "exit without saving"))
         print("{0:15}{1:15}".format("exit", "exit"))
     else:

@@ -26,7 +26,7 @@ for (let i = 0; i < data.length; i++) {
 
   let row = document.createElement('tr');
 
-  row.appendChild(createTextElement('td', i + '.'))
+  row.appendChild(createTextElement('td', i + 1 + '.'))
   row.appendChild(createTextElement('td', name));
 
   let eloText = Math.round(elo*10)/10;
@@ -34,8 +34,6 @@ for (let i = 0; i < data.length; i++) {
     eloText += '?';
   }
   row.appendChild(createTextElement('td', eloText));
-  row.appendChild(createTextElement('td', played));
-
 
   table.appendChild(row);
 }

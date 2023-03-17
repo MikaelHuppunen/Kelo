@@ -10,20 +10,32 @@ function readfile(filepath){
     return result;
 }
 
-data = JSON.parse(readfile("kelo.txt"));
-
-document.write('<font size='+(6*((innerWidth/innerHeight)**0.2))+'vw>');
-document.write('<div style="position: relative; width: 100%;">');
-for(let i = 0; i < data.length; i++){  
-  document.write('<div style="position: absolute; left: '+(10*(innerWidth/innerHeight)**1.5)+'vw; top: '+ (i*5) + 'vh;">');
-  document.write(i+1 + ".");
-  document.write('<span style="position: absolute; left: '+(4000/innerHeight)+'vw; top: 0;">'  + data[i][0] + '</span>');
-  document.write('<span style="position: absolute; left: '+(20000/innerHeight)+'vw; top: 0;">' + Math.round(data[i][1]*10)/10);
-  if(data[i][2] < 5){
-    document.write("?")
-  }
-  document.write('</span>')
-  document.write('</div>');
+function createTextElement(type, text) {
+  let elem = document.createElement(type);
+  elem.textContent = text;
+  return elem;
 }
-document.write('</div>');
-document.write("</font>");
+
+let data = JSON.parse(readfile("kelo.txt"));
+
+
+let table = document.getElementById('elo-table');
+
+for (let i = 0; i < data.length; i++) {
+  let [name, elo, played] = data[i];
+
+  let row = document.createElement('tr');
+
+  row.appendChild(createTextElement('td', i + '.'))
+  row.appendChild(createTextElement('td', name));
+
+  let eloText = Math.round(elo*10)/10;
+  if (played < 5) {
+    eloText += '?';
+  }
+  row.appendChild(createTextElement('td', eloText));
+  row.appendChild(createTextElement('td', played));
+
+
+  table.appendChild(row);
+}

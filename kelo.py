@@ -9,6 +9,7 @@ startingelo = 1284
 with open("kelo.txt", 'r') as f:
     data = json.loads(f.read())
 
+
 def sortusers():
     '''
     Sorts users by elo
@@ -23,6 +24,10 @@ def sortusers():
         elos[max_index] = "-10000"
 
 def calculate_elo(black, white, winner):
+    '''
+    Calculates new elo scores for each player (black and white) depending on the winner (winner)
+    and the current elo rating of each player
+    '''
     global data
     data[black][1] = float(data[black][1])
     data[white][1] = float(data[white][1])
@@ -42,6 +47,9 @@ def calculate_elo(black, white, winner):
     print("{0:10}{1:10}".format(data[black][0], round(data[black][1],1)))
 
 def game():
+    '''
+    Command for adding the results of a finished official kelo-game
+    '''
     global data
     white = input("White: ")
     for i in range(len(data)):
@@ -71,6 +79,9 @@ def game():
             return
 
 def adduser():
+    '''
+    Command for adding a new user to the kelo database
+    '''
     global data, startingelo
     name = str(input("Input name: "))
     for i in range(len(data)):
@@ -81,6 +92,9 @@ def adduser():
     print("user added")
 
 def edituser():
+    '''
+    Command for editing an existing user's kelo information, ie. elo and number of games
+    '''
     user = input("User name: ")
     for i in range(len(data)):
         if user == data[i][0]:
@@ -93,6 +107,7 @@ def edituser():
             return
     print(f"no user {user} exists")
 
+# Main loop
 while(True):
     command = input("Input command: ")
     if command == "adduser":
@@ -138,6 +153,10 @@ for i in range(len(inputdata)):
     if inputdata[i] == "'":
         inputdata[i] = '"'
 
+# Save changes to file 'kelo.txt'
 if(save):
     with open("kelo.txt", 'w') as f:
         data = f.write("".join(inputdata))
+
+# Sort users when exiting program
+sortusers()

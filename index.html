@@ -9,14 +9,28 @@
             font-size: 2vmax;
         }
 
+        table {
+            table-layout: fixed;
+            width: 500px;
+        }
+
         .main {
+            display: flex;
+            justify-content: center;
+        }
+
+        #filter-container {
             display: flex;
             justify-content: center;
         }
     </style>
 
     <body>
+        <div id="filter-container">
+            <input id="filter-input" type="text" />
+        </div>
         <div class="main">
+
             <table id="elo-table"></table>
         </div>
         <script src = "kelo.js"></script>

@@ -43,10 +43,7 @@ function filterEloTable(filter) {
 
 fetch('kelo.txt')
   .then(response => response.json())
-  .then(data => {
-    globalEloData = data;
-    populateEloTable(data)
-  });
+  .then(data => populateEloTable(data));
 
 
 document.getElementById('filter-input').addEventListener('input', function(e) {

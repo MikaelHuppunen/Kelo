@@ -8,6 +8,7 @@ function createTextElement(type, text) {
 
 function populateEloTable(data) {
   let table = document.getElementById('elo-table');
+  let rank = 1;
 
   for (let i = 0; i < data.length; i++) {
     let [name, elo, played] = data[i];
@@ -16,7 +17,12 @@ function populateEloTable(data) {
 
     row['data-name'] = name;
 
-    row.appendChild(createTextElement('td', i + 1 + '.'))
+    if(played >= 5){
+      row.appendChild(createTextElement('td', rank + '.'));
+      rank++;
+    }else{
+      row.appendChild(createTextElement('td'));
+    }
     row.appendChild(createTextElement('td', name));
 
     let eloText = Math.round(elo*10)/10;

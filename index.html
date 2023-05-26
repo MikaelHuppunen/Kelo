@@ -23,6 +23,16 @@
             display: flex;
             justify-content: center;
         }
+
+        #container {
+            position: fixed;
+            left: 700px;
+            top: 500px;
+            background-color: #f0f0f0;
+            padding: 10px;
+            border: 1px solid black;
+            z-index: 2;
+        }
     </style>
 
     <body>
@@ -33,6 +43,7 @@
 
             <table id="elo-table"></table>
         </div>
+        <div id="container"></div>
         <script src = "kelo.js"></script>
     </body>
 </html>

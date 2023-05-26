@@ -5,6 +5,12 @@ function createTextElement(type, text) {
   return elem;
 }
 
+function hide_Textbox(){
+  let textBox = document.getElementById('container');
+  textBox.style.display = 'none';
+}
+
+hide_Textbox();
 
 function populateEloTable(data) {
   let table = document.getElementById('elo-table');
@@ -23,7 +29,8 @@ function populateEloTable(data) {
     }else{
       row.appendChild(createTextElement('td'));
     }
-    row.appendChild(createTextElement('td', name));
+    let textElement = createTextElement('td', name);
+    row.appendChild(textElement);
 
     let eloText = Math.round(elo*10)/10;
     if (played < 5) {
@@ -31,6 +38,21 @@ function populateEloTable(data) {
     }
 
     row.appendChild(createTextElement('td', eloText));
+
+    let textBox = document.getElementById('container');
+    // Event listener for hover
+    document.addEventListener('mousemove', function(e){
+      let{left, top} = textElement.getBoundingClientRect();
+      let computedStyle = getComputedStyle(textElement);
+      // Get the width and height of the text
+      let textWidth = textElement.offsetWidth;
+      let textHeight = textElement.offsetHeight;
+
+      if(e.clientX >= left && e.clientX <= left+textWidth && e.clientY >= top && e.clientY <= top + textHeight){
+        textBox.style.display = 'initial';
+        textBox.innerText = "Games: " + played;
+      }
+    });
   }
 }
 
@@ -46,6 +68,12 @@ function filterEloTable(filter) {
   }
 }
 
+document.addEventListener('mousemove', function(event){
+  let textBox = document.getElementById('container');
+  textBox.style.display = 'none';
+  textBox.style.left = event.clientX + 'px';
+  textBox.style.top = event.clientY + 'px';
+});
 
 fetch('kelo.txt')
   .then(response => response.json())

@@ -9,6 +9,8 @@ startingelo = 1284
 with open("kelo.txt", 'r') as f:
     data = json.loads(f.read())
 
+with open("games.txt", 'r') as f:
+    played_games = json.loads(f.read())
 
 def sortusers():
     '''
@@ -51,6 +53,7 @@ def game():
     Command for adding the results of a finished official kelo-game
     '''
     global data
+    global played_games
     white = input("White: ")
     for i in range(len(data)):
         if white == data[i][0]:
@@ -76,6 +79,7 @@ def game():
             print("black, white or draw")
         else:
             calculate_elo(black, white, winner)
+            played_games += [[data[white][0], data[black][0], int((winner == "white")-(winner == "black"))]]
             return
 
 def adduser():
@@ -152,11 +156,17 @@ inputdata = list(str(data))
 for i in range(len(inputdata)):
     if inputdata[i] == "'":
         inputdata[i] = '"'
+played_games2 = list(str(played_games))
+for i in range(len(played_games2)):
+    if played_games2[i] == "'":
+        played_games2[i] = '"'
 
 # Save changes to file 'kelo.txt'
 if(save):
     with open("kelo.txt", 'w') as f:
         data = f.write("".join(inputdata))
+    with open("games.txt", 'w') as f:
+        played_games = f.write("".join(played_games2))
 
 # Sort users when exiting program
 sortusers()

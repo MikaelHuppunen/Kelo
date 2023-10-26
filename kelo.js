@@ -10,9 +10,55 @@ function hide_Textbox(){
   textBox.style.display = 'none';
 }
 
+function get_wins(games, player){
+  let wins = 0;
+  for(let i = 0; i < games.length; i++){
+    if((games[i][0] == player && games[i][2] == 1) || (games[i][1] == player && games[i][2] == -1)){
+      wins++;
+    }
+  }
+  return wins;
+}
+
+function get_draws(games, player){
+  let draws = 0;
+  for(let i = 0; i < games.length; i++){
+    if((games[i][0] == player || games[i][1] == player) && games[i][2] == 0){
+      draws++;
+    }
+  }
+  return draws;
+}
+
+function get_losses(games, player){
+  let losses = 0;
+  for(let i = 0; i < games.length; i++){
+    if((games[i][0] == player && games[i][2] == -1) || (games[i][1] == player && games[i][2] == 1)){
+      losses++;
+    }
+  }
+  return losses;
+}
+
+function get_results(games, player, played){
+  return [get_wins(games,player), get_draws(games,player), get_losses(games,player)];
+}
+
+function print_stats(games, player, played){
+  let [wins, draws, losses] = get_results(games, player, played);
+  let black_text = document.getElementById('blackText');
+  let green_text = document.getElementById('greenText');
+  let gray_text = document.getElementById('grayText');
+  let red_text = document.getElementById('redText');
+  black_text.textContent = "Games " + played + ": ";
+  green_text.textContent = " " + wins + " ";
+  gray_text.textContent = " " + draws + " ";
+  red_text.textContent = " " + losses + " ";
+}
+
 hide_Textbox();
 
-function populateEloTable(data) {
+function populateEloTable(data, games) {
   let table = document.getElementById('elo-table');
   let rank = 1;
 
@@ -50,7 +96,7 @@ function populateEloTable(data) {
 
       if(e.clientX >= left && e.clientX <= left+textWidth && e.clientY >= top && e.clientY <= top + textHeight){
         textBox.style.display = 'initial';
-        textBox.innerText = "Games: " + played;
+        print_stats(games, name, played)
       }
     });
   }
@@ -75,9 +121,15 @@ document.addEventListener('mousemove', function(event){
   textBox.style.top = event.clientY + 'px';
 });
 
+// Fetch the first file
 fetch('kelo.txt')
-  .then(response => response.json())
-  .then(data => populateEloTable(data));
+  .then(response1 => response1.json())
+  .then(data1 => {
+    // Fetch the second file
+    return fetch('games.txt')
+      .then(response2 => response2.json())
+      .then(data2 => populateEloTable(data1, data2));
+  })
 
 
 document.getElementById('filter-input').addEventListener('input', function(e) {

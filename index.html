@@ -33,6 +33,18 @@
             border: 1px solid black;
             z-index: 2;
         }
+        .black-text {
+            color: black;
+        }
+        .green-text {
+            color: green;
+        }
+        .gray-text {
+            color: gray;
+        }
+        .red-text {
+            color: red;
+        }
     </style>
 
     <body>
@@ -43,7 +55,12 @@
 
             <table id="elo-table"></table>
         </div>
-        <div id="container"></div>
+        <div id="container">
+            <span class="black-text" id="blackText"></span>
+            <span class="green-text" id="greenText"></span>
+            <span class="gray-text" id="grayText"></span>
+            <span class="red-text" id="redText"></span>
+        </div>
         <script src = "kelo.js"></script>
     </body>
 </html>

@@ -21,11 +21,38 @@ def sortusers():
     global data
     #saves orignal data to numpy array
     temp_data = np.array(deepcopy(data))
-    elos = temp_data[:,1].tolist()
-    for i in range(len(elos)):
-        max_index = elos.index(max(elos))
+    number_of_games = temp_data[:,2].tolist()
+
+    #split elos to definitive and provisional
+    provisional = []
+    for i in range(len(data)):
+        if int(number_of_games[i]) < 5:
+            provisional += [temp_data[i].tolist()]
+    provisional = np.array(provisional)
+    provisional_elos = provisional[:,1].tolist()
+    
+    definitive = []
+    for i in range(len(data)):
+        if int(number_of_games[i]) >= 5:
+            definitive += [temp_data[i].tolist()]
+    definitive = np.array(definitive)
+    definitive_elos = definitive[:,1].tolist()
+    
+    #order the lists
+    for i in range(len(provisional)):
+        max_index = provisional_elos.index(max(provisional_elos))
         data[i] = temp_data[max_index].tolist()
-        elos[max_index] = "-10000"
+        provisional_elos[max_index] = "-10000"
+    provisional = provisional.tolist()
+    
+    for i in range(len(definitive)):
+        max_index = definitive_elos.index(max(definitive_elos))
+        data[i] = temp_data[max_index].tolist()
+        definitive_elos[max_index] = "-10000"
+    definitive = definitive.tolist()
+    
+    #combine the data
+    data = definitive + provisional
 
 def calculate_elo(black, white, winner):
     '''
@@ -160,6 +187,9 @@ while(True):
     else:
         print("invalid command, type help for list of commands")
 
+# Sort users when exiting program
+sortusers()
+
 #turns all ' characters to "
 inputdata = list(str(data))
 for i in range(len(inputdata)):
@@ -176,6 +206,3 @@ if(save):
         data = f.write("".join(inputdata))
     with open("games.txt", 'w') as f:
         played_games = f.write("".join(played_games2))
-
-# Sort users when exiting program
-sortusers()

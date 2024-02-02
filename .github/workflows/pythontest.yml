@@ -21,6 +21,6 @@ jobs:
         python -m pip install numpy
 
     - name: Test with kelo.py
-      run: |
-        echo -e "help\exit" | python kelo.py
+      run: echo -e "help\nexit" | python kelo.py
+
 

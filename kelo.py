@@ -20,39 +20,39 @@ def sortusers():
     '''
     global data
     #saves orignal data to numpy array
-    temp_data = np.array(deepcopy(data))
-    number_of_games = temp_data[:,2].tolist()
+    numpy_data = np.array(deepcopy(data))
+    number_of_games = numpy_data[:,2].tolist()
 
     #split elos to definitive and provisional
     provisional = []
     for i in range(len(data)):
         if int(number_of_games[i]) < 5:
-            provisional += [temp_data[i].tolist()]
+            provisional += [numpy_data[i].tolist()]
     provisional = np.array(provisional)
     provisional_elos = provisional[:,1].tolist()
     
     definitive = []
     for i in range(len(data)):
         if int(number_of_games[i]) >= 5:
-            definitive += [temp_data[i].tolist()]
+            definitive += [numpy_data[i].tolist()]
     definitive = np.array(definitive)
     definitive_elos = definitive[:,1].tolist()
     
     #order the lists
+    provisional_data = []
     for i in range(len(provisional)):
         max_index = provisional_elos.index(max(provisional_elos))
-        data[i] = temp_data[max_index].tolist()
+        provisional_data += [provisional[max_index].tolist()]
         provisional_elos[max_index] = "-10000"
-    provisional = provisional.tolist()
     
+    definitive_data = []
     for i in range(len(definitive)):
         max_index = definitive_elos.index(max(definitive_elos))
-        data[i] = temp_data[max_index].tolist()
+        definitive_data += [definitive[max_index].tolist()]
         definitive_elos[max_index] = "-10000"
-    definitive = definitive.tolist()
     
     #combine the data
-    data = definitive + provisional
+    data = definitive_data + provisional_data
 
 def calculate_elo(black, white, winner):
     '''

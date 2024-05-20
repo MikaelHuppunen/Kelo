@@ -10,42 +10,60 @@ function hide_Textbox(){
   textBox.style.display = 'none';
 }
 
-function get_wins(games, player){
+function get_wins(games, player, results_at_start){
   let wins = 0;
   for(let i = 0; i < games.length; i++){
     if((games[i][0] == player && games[i][2] == 1) || (games[i][1] == player && games[i][2] == -1)){
       wins++;
     }
   }
+  for(let i = 0; i < results_at_start.length; i++){
+    if((results_at_start[i][0] == player)){
+      wins += Number(results_at_start[i][1]);
+      break;
+    }
+  }
   return wins;
 }
 
-function get_draws(games, player){
+function get_draws(games, player, results_at_start){
   let draws = 0;
   for(let i = 0; i < games.length; i++){
     if((games[i][0] == player || games[i][1] == player) && games[i][2] == 0){
       draws++;
     }
   }
+  for(let i = 0; i < results_at_start.length; i++){
+    if((results_at_start[i][0] == player)){
+      draws += Number(results_at_start[i][2]);
+      break;
+    }
+  }
   return draws;
 }
 
-function get_losses(games, player){
+function get_losses(games, player, results_at_start){
   let losses = 0;
   for(let i = 0; i < games.length; i++){
     if((games[i][0] == player && games[i][2] == -1) || (games[i][1] == player && games[i][2] == 1)){
       losses++;
     }
   }
+  for(let i = 0; i < results_at_start.length; i++){
+    if((results_at_start[i][0] == player)){
+      losses += Number(results_at_start[i][3]);
+      break;
+    }
+  }
   return losses;
 }
 
-function get_results(games, player, played){
-  return [get_wins(games,player), get_draws(games,player), get_losses(games,player)];
+function get_results(games, player, played, results_at_start){
+  return [get_wins(games,player,results_at_start), get_draws(games,player,results_at_start), get_losses(games,player,results_at_start)];
 }
 
-function print_stats(games, player, played){
-  let [wins, draws, losses] = get_results(games, player, played);
+function print_stats(games, player, played, results_at_start){
+  let [wins, draws, losses] = get_results(games, player, played, results_at_start);
   let black_text = document.getElementById('blackText');
   let green_text = document.getElementById('greenText');
   let gray_text = document.getElementById('grayText');
@@ -58,7 +76,7 @@ function print_stats(games, player, played){
 
 hide_Textbox();
 
-function populateEloTable(data, games) {
+function populateEloTable(data, games, results_at_start) {
   let table = document.getElementById('elo-table');
   let rank = 1;
 
@@ -96,7 +114,7 @@ function populateEloTable(data, games) {
 
       if(e.clientX >= left && e.clientX <= left+textWidth && e.clientY >= top && e.clientY <= top + textHeight){
         textBox.style.display = 'initial';
-        print_stats(games, name, played)
+        print_stats(games, name, played, results_at_start)
       }
     });
   }
@@ -128,9 +146,16 @@ fetch('kelo.txt')
     // Fetch the second file
     return fetch('games.txt')
       .then(response2 => response2.json())
-      .then(data2 => populateEloTable(data1, data2));
-  })
-
+      .then(data2 => {
+        // Fetch the third file
+        return fetch('results_at_start.txt')
+          .then(response3 => response3.json())
+          .then(data3 => {
+            // Call a function with the data from all three files
+            populateEloTable(data1, data2, data3);
+          });
+      });
+  });
 
 document.getElementById('filter-input').addEventListener('input', function(e) {
   filterEloTable(e.target.value);
